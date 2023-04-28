@@ -1,0 +1,4 @@
+{
+  "rust-analyzer.showUnlinkedFileNotification": false,
+  "vue.features.codeActions.enable": false,
+}
