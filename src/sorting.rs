@@ -5,7 +5,7 @@ mod bogo_sort;
 mod bubble_sort;
 mod bucket_sort;
 mod cocktail_shaker_sort;
-// mod comb_sort;
+mod comb_sort;
 // mod counting_sort;
 // mod cycle_sort;
 // mod dutch_national_flag_sort;
@@ -31,7 +31,8 @@ use std::hash::Hash;
 
 pub use self::{
     bead_sort::bead_sort, bogo_sort::bogo_sort, bubble_sort::bubble_sort, bucket_sort::bucket_sort,
-    cocktail_shaker_sort::cocktail_shaker_sort, insertion_sort::insertion_sort,
+    cocktail_shaker_sort::cocktail_shaker_sort, comb_sort::comb_sort,
+    insertion_sort::insertion_sort,
 };
 
 #[cfg(test)]
