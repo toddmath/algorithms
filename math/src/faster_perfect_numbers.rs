@@ -1,5 +1,4 @@
 use super::{is_mersenne_prime, prime_numbers};
-use std::convert::TryInto;
 
 /// Generates a list of perfect numbers till `num` using the
 /// [`Lucas Lehmer test`](https://en.wikipedia.org/wiki/Lucas%E2%80%93Lehmer_primality_test) algorithm.
@@ -9,8 +8,8 @@ pub fn generate_perfect_numbers(num: usize) -> Vec<usize> {
         .filter_map(|n| {
             if is_mersenne_prime(n) {
                 Some(
-                    (2usize.pow(n.try_into().unwrap_or_default()) - 1)
-                        * (2usize.pow((n - 1).try_into().unwrap_or_default())),
+                    (2usize.pow(u32::try_from(n).unwrap_or_default()) - 1)
+                        * (2usize.pow(u32::try_from(n - 1).unwrap_or_default())),
                 )
             } else {
                 None

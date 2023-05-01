@@ -1,9 +1,10 @@
 //! Simple implementation of run-length encoding.
 //!
 //! [`wiki`](https://en.wikipedia.org/wiki/Run-length_encoding)
+
 use std::iter;
 
-/// Simple implementation of run length encoding
+/// Simple implementation of the run length encoding algorithm.
 pub fn run_length_encode(text: &str) -> Vec<(char, i32)> {
     text.chars()
         .map(|c| (c, 1_i32))
@@ -20,11 +21,11 @@ pub fn run_length_encode(text: &str) -> Vec<(char, i32)> {
         })
 }
 
-/// Simple implementation of run length decoding
+/// Simple implementation of the run length decoding algorithm.
 pub fn run_length_decode(encoded: &[(char, i32)]) -> String {
     encoded
         .iter()
-        .map(|&(c, i)| iter::repeat(c).take(i as usize).collect::<String>())
+        .flat_map(|&(c, i)| iter::repeat(c).take(i as usize))
         .collect()
 }
 
@@ -44,34 +45,28 @@ mod tests {
 
     #[test]
     fn test_run_length_encode() {
-        let res = run_length_encode("");
-        assert_eq!(res, []);
-
-        let res = run_length_encode("A");
-        assert_eq!(res, [('A', 1)]);
-
-        let res = run_length_encode("AA");
-        assert_eq!(res, [('A', 2)]);
-
-        let res = run_length_encode("AAAABBBCCDAA");
-        assert_eq!(res, [('A', 4), ('B', 3), ('C', 2), ('D', 1), ('A', 2)]);
-
-        let res = run_length_encode("Rust-Trends");
-        assert_eq!(
-            res,
-            [
-                ('R', 1),
-                ('u', 1),
-                ('s', 1),
-                ('t', 1),
-                ('-', 1),
-                ('T', 1),
-                ('r', 1),
-                ('e', 1),
-                ('n', 1),
-                ('d', 1),
-                ('s', 1)
-            ]
-        );
+        assert_eq!(run_length_encode(""), []);
+        assert_eq!(run_length_encode("A"), [('A', 1)]);
+        assert_eq!(run_length_encode("AA"), [('A', 2)]);
+        assert_eq!(run_length_encode("AAAABBBCCDAA"), [
+            ('A', 4),
+            ('B', 3),
+            ('C', 2),
+            ('D', 1),
+            ('A', 2)
+        ]);
+        assert_eq!(run_length_encode("Rust-Trends"), [
+            ('R', 1),
+            ('u', 1),
+            ('s', 1),
+            ('t', 1),
+            ('-', 1),
+            ('T', 1),
+            ('r', 1),
+            ('e', 1),
+            ('n', 1),
+            ('d', 1),
+            ('s', 1)
+        ]);
     }
 }

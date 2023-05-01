@@ -5,6 +5,7 @@ pub fn bubble_sort<T: Ord>(arr: &mut [T]) {
     }
     let mut sorted = false;
     let mut len = arr.len();
+
     while !sorted {
         sorted = true;
         for i in 0..len - 1 {

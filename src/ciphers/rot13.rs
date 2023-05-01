@@ -1,8 +1,7 @@
 //! rot13 or rotate 13 cipher algorithm
 
+/// Rotate 13 cipher algorithm.
 pub fn rot13<T: AsRef<str>>(text: T) -> String {
-    // let text = text.as_ref();
-    // let to_enc = text.to_uppercase();
     text.as_ref()
         .to_uppercase()
         .chars()

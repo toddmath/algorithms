@@ -1,5 +1,6 @@
-use num_complex::Complex64;
 use std::f64::consts::TAU;
+
+use num_complex::Complex64;
 
 /// Fast fourier transform with input permutation function
 pub fn fast_fourier_transform_input_permutation(length: usize) -> Vec<usize> {

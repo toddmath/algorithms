@@ -69,7 +69,8 @@ pub struct SHA256 {
     buffer: [u32; 16],
     /// Length (bits) of the message, should always be a multiple of 8
     length: u64,
-    /// The current hash value. Note: this value is invalid unless `finalize` is called
+    /// The current hash value. Note: this value is invalid unless `finalize` is
+    /// called
     pub h: [u32; 8],
     /// Message schedule
     w: [u32; 64],
@@ -111,7 +112,7 @@ fn process_block(h: &mut [u32; 8], w: &mut [u32; 64], round: &mut [u32; 8], buf:
 }
 
 impl SHA256 {
-    /// Create a new SHA256 instance with the default initial hash value
+    /// Create a new [`SHA256`] instance with the default initial hash value.
     pub fn new_default() -> Self {
         SHA256 {
             buffer: [0u32; 16],
@@ -124,29 +125,34 @@ impl SHA256 {
     }
 
     #[allow(dead_code)]
-    /// Note: buffer should be empty before calling this!
+    /// # Note
+    /// The buffer should be empty before calling this!
     pub fn process_block(&mut self, buf: &[u32; 16]) {
         process_block(&mut self.h, &mut self.w, &mut self.round, buf);
         self.length += 512;
     }
 
-    /// Update the hash with the given data
+    /// Update the hash with the given data.
     pub fn update(&mut self, data: &[u8]) {
         if data.is_empty() {
             return;
         }
         let offset = (((32 - (self.length & 31)) & 31) >> 3) as usize;
         let mut buf_ind = ((self.length & 511) >> 5) as usize;
+
         for (i, &byte) in data.iter().enumerate().take(offset) {
             self.buffer[buf_ind] ^= (byte as u32) << ((offset - i - 1) << 3);
         }
         self.length += (data.len() as u64) << 3;
+
         if offset > data.len() {
             return;
         }
+
         if offset > 0 {
             buf_ind += 1;
         }
+
         if data.len() > 3 {
             for i in (offset..(data.len() - 3)).step_by(4) {
                 if buf_ind & 16 == 16 {
@@ -160,12 +166,15 @@ impl SHA256 {
                 buf_ind += 1;
             }
         }
+
         if buf_ind & 16 == 16 {
             process_block(&mut self.h, &mut self.w, &mut self.round, &self.buffer);
             buf_ind = 0;
         }
+
         self.buffer[buf_ind] = 0;
         let rem_ind = offset + ((data.len() - offset) & !0b11);
+
         for (i, &byte) in data[rem_ind..].iter().enumerate() {
             self.buffer[buf_ind] ^= (byte as u32) << ((3 - i) << 3);
         }
@@ -196,7 +205,9 @@ impl SHA256 {
             padding[len - 1] = self.length as u8;
             self.update(&padding);
         }
+
         assert_eq!(self.length & 511, 0);
+
         let mut result = [0u8; 32];
         for i in (0..32).step_by(4) {
             result[i] = (self.h[i >> 2] >> 24) as u8;
@@ -224,10 +235,12 @@ impl Hasher<32> for SHA256 {
 
 #[cfg(test)]
 pub mod tests {
-    use super::*;
     use std::fmt::Write;
+
+    use super::*;
     // use crate::math::LinearSieve;
-    // TODO implement test `test_constants` after implementing `crate::math::LinearSieve`
+    // TODO implement test `test_constants` after implementing
+    // `crate::math::LinearSieve`
 
     pub fn get_hash_string(hash: &[u8; 32]) -> String {
         let mut result = String::new();
@@ -241,51 +254,39 @@ pub mod tests {
     #[test]
     fn empty() {
         let mut res = SHA256::new_default();
-        assert_eq!(
-            res.get_hash(),
-            [
-                0xe3, 0xb0, 0xc4, 0x42, 0x98, 0xfc, 0x1c, 0x14, 0x9a, 0xfb, 0xf4, 0xc8, 0x99, 0x6f,
-                0xb9, 0x24, 0x27, 0xae, 0x41, 0xe4, 0x64, 0x9b, 0x93, 0x4c, 0xa4, 0x95, 0x99, 0x1b,
-                0x78, 0x52, 0xb8, 0x55
-            ]
-        );
+        assert_eq!(res.get_hash(), [
+            0xe3, 0xb0, 0xc4, 0x42, 0x98, 0xfc, 0x1c, 0x14, 0x9a, 0xfb, 0xf4, 0xc8, 0x99, 0x6f,
+            0xb9, 0x24, 0x27, 0xae, 0x41, 0xe4, 0x64, 0x9b, 0x93, 0x4c, 0xa4, 0x95, 0x99, 0x1b,
+            0x78, 0x52, 0xb8, 0x55
+        ]);
     }
 
     #[test]
     fn ascii() {
         let mut res = SHA256::new_default();
         res.update(b"The quick brown fox jumps over the lazy dog");
-        assert_eq!(
-            res.get_hash(),
-            [
-                0xD7, 0xA8, 0xFB, 0xB3, 0x07, 0xD7, 0x80, 0x94, 0x69, 0xCA, 0x9A, 0xBC, 0xB0, 0x08,
-                0x2E, 0x4F, 0x8D, 0x56, 0x51, 0xE4, 0x6D, 0x3C, 0xDB, 0x76, 0x2D, 0x02, 0xD0, 0xBF,
-                0x37, 0xC9, 0xE5, 0x92
-            ]
-        )
+        assert_eq!(res.get_hash(), [
+            0xD7, 0xA8, 0xFB, 0xB3, 0x07, 0xD7, 0x80, 0x94, 0x69, 0xCA, 0x9A, 0xBC, 0xB0, 0x08,
+            0x2E, 0x4F, 0x8D, 0x56, 0x51, 0xE4, 0x6D, 0x3C, 0xDB, 0x76, 0x2D, 0x02, 0xD0, 0xBF,
+            0x37, 0xC9, 0xE5, 0x92
+        ])
     }
 
     #[test]
     fn ascii_avalanche() {
         let mut res = SHA256::new_default();
         res.update(b"The quick brown fox jumps over the lazy dog.");
-        assert_eq!(
-            res.get_hash(),
-            [
-                0xEF, 0x53, 0x7F, 0x25, 0xC8, 0x95, 0xBF, 0xA7, 0x82, 0x52, 0x65, 0x29, 0xA9, 0xB6,
-                0x3D, 0x97, 0xAA, 0x63, 0x15, 0x64, 0xD5, 0xD7, 0x89, 0xC2, 0xB7, 0x65, 0x44, 0x8C,
-                0x86, 0x35, 0xFB, 0x6C
-            ]
-        );
+        assert_eq!(res.get_hash(), [
+            0xEF, 0x53, 0x7F, 0x25, 0xC8, 0x95, 0xBF, 0xA7, 0x82, 0x52, 0x65, 0x29, 0xA9, 0xB6,
+            0x3D, 0x97, 0xAA, 0x63, 0x15, 0x64, 0xD5, 0xD7, 0x89, 0xC2, 0xB7, 0x65, 0x44, 0x8C,
+            0x86, 0x35, 0xFB, 0x6C
+        ]);
         // Test if finalization is not repeated twice
-        assert_eq!(
-            res.get_hash(),
-            [
-                0xEF, 0x53, 0x7F, 0x25, 0xC8, 0x95, 0xBF, 0xA7, 0x82, 0x52, 0x65, 0x29, 0xA9, 0xB6,
-                0x3D, 0x97, 0xAA, 0x63, 0x15, 0x64, 0xD5, 0xD7, 0x89, 0xC2, 0xB7, 0x65, 0x44, 0x8C,
-                0x86, 0x35, 0xFB, 0x6C
-            ]
-        )
+        assert_eq!(res.get_hash(), [
+            0xEF, 0x53, 0x7F, 0x25, 0xC8, 0x95, 0xBF, 0xA7, 0x82, 0x52, 0x65, 0x29, 0xA9, 0xB6,
+            0x3D, 0x97, 0xAA, 0x63, 0x15, 0x64, 0xD5, 0xD7, 0x89, 0xC2, 0xB7, 0x65, 0x44, 0x8C,
+            0x86, 0x35, 0xFB, 0x6C
+        ])
     }
 
     #[test]

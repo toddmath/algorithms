@@ -1,10 +1,11 @@
 //! Calculate the least common multiple of n numbers
 
-use num_traits::PrimInt;
 // use num_integer::Integer;
 use std::ops::{BitOr, Div, Mul, Rem};
 
-/// Calculate the least common multiple of n numbers
+use num_traits::PrimInt;
+
+/// Calculate the least common multiple of given numbers
 pub fn lcm<T: PrimInt + Copy + BitOr<Output = T>>(nums: &[T]) -> T {
     debug_assert!(!nums.is_empty(), "Cannot calculate lcm of an empty array.");
     if nums.len() == 1 {

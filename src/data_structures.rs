@@ -1,4 +1,4 @@
-//! # Data Structures
+//! Common data structures.
 
 mod avl_tree;
 mod b_tree;
@@ -8,10 +8,7 @@ mod queue;
 mod stack_using_singly_linked_list;
 mod trie;
 
-pub use self::avl_tree::AVLTree;
-pub use self::b_tree::BTree;
-pub use self::heap::Heap;
-pub use self::linked_list::LinkedList;
-pub use self::queue::Queue;
-pub use self::stack_using_singly_linked_list::Stack;
-pub use self::trie::Trie;
+pub use self::{
+    avl_tree::AVLTree, b_tree::BTree, heap::Heap, linked_list::LinkedList, queue::Queue,
+    stack_using_singly_linked_list::Stack, trie::Trie,
+};

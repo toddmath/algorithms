@@ -7,7 +7,6 @@ pub fn cocktail_shaker_sort<T: Ord>(arr: &mut [T]) {
 
     loop {
         let mut swapped = false;
-
         for i in 0..(len - 1).clamp(0, len) {
             if arr[i] > arr[i + 1] {
                 // TODO maybe arr.swap_unchecked is okay since we know the index is valid?
@@ -15,13 +14,11 @@ pub fn cocktail_shaker_sort<T: Ord>(arr: &mut [T]) {
                 swapped = true;
             }
         }
-
         if !swapped {
             break;
         }
 
         swapped = false;
-
         for i in (0..(len - 1).clamp(0, len)).rev() {
             if arr[i] > arr[i + 1] {
                 // TODO maybe arr.swap_unchecked is okay since we know the index is valid?
@@ -29,7 +26,6 @@ pub fn cocktail_shaker_sort<T: Ord>(arr: &mut [T]) {
                 swapped = true;
             }
         }
-
         if !swapped {
             break;
         }

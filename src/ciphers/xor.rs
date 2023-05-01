@@ -1,10 +1,12 @@
 //! Simple XOR cipher.
 
+/// XOR cipher algorithm.
 #[inline]
 pub fn xor_bytes(text: &[u8], key: u8) -> Vec<u8> {
-    text.iter().map(|b| b ^ key).collect()
+    text.iter().map(|&b| b ^ key).collect()
 }
 
+/// XOR cipher algorithm.
 #[inline]
 pub fn xor(text: impl AsRef<str>, key: u8) -> Vec<u8> {
     xor_bytes(text.as_ref().as_bytes(), key)

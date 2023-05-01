@@ -3,10 +3,11 @@
 //!
 //! # Algorithm
 //!
-//! Rotate each ascii character by shift. The most basic example is ROT 13, which rotates 'a' to
-//! 'n'. This implementation does not rotate unicode characters.
+//! Rotate each ascii character by shift. The most basic example is ROT 13,
+//! which rotates 'a' to 'n'. This implementation does not rotate unicode
+//! characters.
 
-/// Caesar cipher to rotate cipher text by shift and return an owned String.
+/// Caesar cipher to shif, or rotate, cipher text.
 pub fn caesar(cipher: impl AsRef<str>, shift: u8) -> String {
     cipher
         .as_ref()

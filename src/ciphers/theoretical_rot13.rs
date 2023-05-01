@@ -1,5 +1,6 @@
 //! In theory, rot13 only encodes lowercase characters.
 
+/// Theoretical rot13 algorithm. Only encodes lowercase characters!
 pub fn theoretical_rot13(text: impl AsRef<str>) -> String {
     text.as_ref()
         .chars()

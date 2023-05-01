@@ -6,9 +6,9 @@
 /// default ones if you really know what you are doing.
 #[derive(Debug, Clone, Copy)]
 pub struct PCG32 {
-    state:      u64,
+    state: u64,
     multiplier: u64,
-    increment:  u64,
+    increment: u64,
 }
 
 pub const PCG32_MULTIPLIER: u64 = 6364136223846793005_u64;
@@ -33,6 +33,7 @@ impl PCG32 {
         pcg
     }
 
+    /// Creates a new [`PCG32`] with default values.
     pub fn new_default(seed: u64) -> Self {
         let multiplier = PCG32_MULTIPLIER;
         let increment = PCG32_INCREMENT;
@@ -45,6 +46,7 @@ impl PCG32 {
         pcg
     }
 
+    /// Returns the next generated value.
     #[inline]
     pub fn next(&mut self) {
         self.state = self
@@ -53,14 +55,15 @@ impl PCG32 {
             .wrapping_add(self.increment);
     }
 
-    /// Advance the PCG by `delta` steps in O(lg(`delta`)) time. By passing
-    /// a negative i64 as u64, it can go back too.
+    /// Advance the [`PCG32`] by `delta` steps in O(lg(`delta`)) time. By
+    /// passing a negative `i64` as `u64`, it can go back too.
     #[inline]
     pub fn advance(&mut self, mut delta: u64) {
         let mut acc_mult = 1u64;
         let mut acc_incr = 0u64;
         let mut curr_mlt = self.multiplier;
         let mut curr_inc = self.increment;
+
         while delta > 0 {
             if delta & 1 != 0 {
                 acc_mult = acc_mult.wrapping_mul(curr_mlt);
@@ -70,6 +73,7 @@ impl PCG32 {
             curr_mlt = curr_mlt.wrapping_mul(curr_mlt);
             delta >>= 1;
         }
+
         self.state = acc_mult.wrapping_mul(self.state).wrapping_add(acc_incr);
     }
 
@@ -106,11 +110,13 @@ impl PCG32 {
         )
     }
 
+    /// Returns the state of this [`PCG32`].
     #[inline]
     pub fn get_state(&self) -> u64 {
         self.state
     }
 
+    /// Mutabley iterate over this [`PCG32`].
     pub fn iter_mut(&mut self) -> IterMut {
         IterMut { pcg: self }
     }
@@ -141,11 +147,14 @@ mod tests {
         let mut pcg = PCG32::new_default(314159);
         let mut pcg2 = PCG32::new_default(314159);
         assert_eq!(pcg.get_u32(), pcg2.get_u32());
+
         let mut randoms: Vec<u32> = pcg.iter_mut().take(numbers).collect::<Vec<u32>>();
         pcg2.advance(1000);
         assert_eq!(pcg2.get_u32(), randoms[1000]);
+
         pcg2.advance((-1001_i64) as u64);
         assert_eq!(pcg2.get_u32(), randoms[0]);
+
         randoms.sort_unstable();
         randoms.dedup();
         assert_eq!(randoms.len(), numbers);

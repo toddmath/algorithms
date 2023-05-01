@@ -4,8 +4,9 @@
 //! the [`matrix_element_type_def`] macro.
 //!
 //! Wikipedia reference: https://www.wikiwand.com/en/Matrix_(mathematics)
-use itertools::assert_equal;
 use std::ops::{Add, AddAssign, Index, IndexMut, Mul, Sub};
+
+use itertools::assert_equal;
 
 /// Build a [`Matrix`] idiomatically.
 #[macro_export]
@@ -15,6 +16,7 @@ macro_rules! matrix {
     }};
 }
 
+/// A trait for types that can be used as elements in a [`Matrix`].
 pub trait MatrixElement:
     Add<Output = Self> + Sub<Output = Self> + Mul<Output = Self> + AddAssign + Copy + From<u8>
 {
@@ -65,6 +67,7 @@ impl<T: MatrixElement> Matrix<T> {
         Self { data, rows, cols }
     }
 
+    /// Creates a new zero filled [`Matrix<T>`] from a vector of vectors.
     pub fn zero(rows: usize, cols: usize) -> Self {
         Self {
             data: vec![0.into(); rows * cols],
@@ -73,6 +76,7 @@ impl<T: MatrixElement> Matrix<T> {
         }
     }
 
+    /// Creates a new identity [`Matrix<T>`] of size `len`.
     pub fn identity(len: usize) -> Self {
         let mut identity = Matrix::zero(len, len);
         for i in 0..len {
@@ -81,6 +85,7 @@ impl<T: MatrixElement> Matrix<T> {
         identity
     }
 
+    /// [`Matrix<T>`] transposition.
     pub fn transpose(&self) -> Self {
         let mut result = Matrix::zero(self.cols, self.rows);
         for i in 0..self.rows {

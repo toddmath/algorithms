@@ -29,6 +29,7 @@ pub struct Poly1305 {
 }
 
 impl Default for Poly1305 {
+    #[inline]
     fn default() -> Self {
         Self::new()
     }
@@ -36,12 +37,13 @@ impl Default for Poly1305 {
 
 impl Poly1305 {
     #[allow(missing_docs)]
+    #[inline]
     pub fn new() -> Self {
         Self {
             p: hex_uint!("3fffffffffffffffffffffffffffffffb"), // 2^130 - 5
-            r: Zero::zero(),
-            s: Zero::zero(),
-            acc: Zero::zero(),
+            r: BigUint::zero(),
+            s: BigUint::zero(),
+            acc: BigUint::zero(),
         }
     }
 
@@ -79,8 +81,9 @@ impl Poly1305 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::fmt::Write;
+
+    use super::*;
 
     fn get_tag_hex(tag: &[u8]) -> String {
         let mut result = String::new();

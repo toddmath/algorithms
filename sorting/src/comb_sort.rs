@@ -10,6 +10,7 @@ pub fn comb_sort<T: Ord>(arr: &mut [T]) {
             gap = 1;
             sorted = true;
         }
+
         for i in 0..arr.len() - gap {
             let j = i + gap;
             if arr[i] > arr[j] {

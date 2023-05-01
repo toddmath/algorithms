@@ -5,8 +5,10 @@
 //!
 //! Some use cases are:
 //!   - factorizing any number k in the sieve in O(log(k))
-//!   - calculating arbitrary multiplicative functions on sieve numbers without increasing the time complexity
-//!   - As a by product, all prime numbers less than `max_number` are stored in `primes` vector.
+//!   - calculating arbitrary multiplicative functions on sieve numbers without
+//!     increasing the time complexity
+//!   - As a by product, all prime numbers less than `max_number` are stored in
+//!     `primes` vector.
 
 /// Linear Sieve algorithm:
 ///
@@ -15,16 +17,21 @@
 ///
 /// Some use cases are:
 ///   - factorizing any number k in the sieve in O(log(k))
-///   - calculating arbitrary multiplicative functions on sieve numbers without increasing the time complexity
-///   - As a by product, all prime numbers less than `max_number` are stored in `primes` vector.
+///   - calculating arbitrary multiplicative functions on sieve numbers without
+///     increasing the time complexity
+///   - As a by product, all prime numbers less than `max_number` are stored in
+///     `primes` vector.
 #[derive(Debug, Default, Clone, PartialEq, Eq)]
 pub struct LinearSieve {
     max_number: usize,
+    /// All prime numbers less than `max_number`
     pub primes: Vec<usize>,
+    /// Minimum prime factor of each number less than `max_number`
     pub min_prime_factor: Vec<usize>,
 }
 
 impl LinearSieve {
+    /// Creates a new [`LinearSieve`].
     pub const fn new() -> Self {
         Self {
             max_number: 0,
@@ -33,6 +40,12 @@ impl LinearSieve {
         }
     }
 
+    /// Prepares this [`LinearSieve`]
+    ///
+    /// # Errors
+    ///
+    /// This function will return an error if `max_number` is less than or equal
+    /// to 1 or if the sieve is already initialized.
     pub fn prepare(&mut self, max_number: usize) -> Result<(), &'static str> {
         if max_number <= 1 {
             return Err("Sieve size should be greater than 1");
@@ -60,6 +73,12 @@ impl LinearSieve {
         Ok(())
     }
 
+    /// Factorizes a number in O(log(n)) time.
+    ///
+    /// # Errors
+    ///
+    /// This function will return an error if `number` is greater than
+    /// `max_number` or if `number` is zero.
     pub fn factorize(&self, mut number: usize) -> Result<Vec<usize>, &'static str> {
         if number > self.max_number {
             return Err("Number is greater than sieve size");

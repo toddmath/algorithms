@@ -3,19 +3,17 @@
 use num_bigint::BigUint;
 use num_traits::One;
 
+#[inline]
 /// Calculate the factorial of a number
 pub fn factorial(num: u32) -> BigUint {
-    let mut result: BigUint = One::one();
-    for i in 1..=num {
-        result *= i;
-    }
-    result
+    (1..=num).fold(BigUint::one(), |acc, x| acc * x)
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::str::FromStr;
+
+    use super::*;
 
     #[test]
     fn basic_factorial() {

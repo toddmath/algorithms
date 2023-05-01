@@ -8,28 +8,32 @@
 //!
 //! # Examples
 //! ```
-//! use rust_algorithms::backtracking::generate_all_combinations;
+//! use algorithms::backtracking::generate_all_combinations;
 //! let combos = generate_all_combinations(4, 2);
-//! assert_eq!(combos,
-//!     vec![
-//!         vec![1, 2], vec![1, 3], vec![1, 4],
-//!         vec![2, 3], vec![2, 4], vec![3, 4]
-//!     ]
-//! );
+//! assert_eq!(combos, vec![
+//!     vec![1, 2],
+//!     vec![1, 3],
+//!     vec![1, 4],
+//!     vec![2, 3],
+//!     vec![2, 4],
+//!     vec![3, 4]
+//! ]);
 //! ```
 
 /// Generate all combinations of size k out of 1 ... n
 ///
 /// # Examples
 /// ```
-/// use rust_algorithms::backtracking::generate_all_combinations;
+/// use algorithms::backtracking::generate_all_combinations;
 /// let combos = generate_all_combinations(4, 2);
-/// assert_eq!(combos,
-///    vec![
-///       vec![1, 2], vec![1, 3], vec![1, 4],
-///       vec![2, 3], vec![2, 4], vec![3, 4]
-///     ]
-/// );
+/// assert_eq!(combos, vec![
+///     vec![1, 2],
+///     vec![1, 3],
+///     vec![1, 4],
+///     vec![2, 3],
+///     vec![2, 4],
+///     vec![3, 4]
+/// ]);
 /// ```
 pub fn generate_all_combinations(n: i32, k: i32) -> Vec<Vec<i32>> {
     let mut result = vec![];

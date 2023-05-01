@@ -1,7 +1,5 @@
-//! Sudoku solver using Backtracking.
-//! [`GeeksForGeeks`]
-//!
-//! [`GeeksForGeeks`]: https://www.geeksforgeeks.org/sudoku-backtracking-7/
+//! Sudoku solver using backtracking.
+//! [`GeeksForGeeks`](https://www.geeksforgeeks.org/sudoku-backtracking-7/)
 
 /// Sudoku board
 #[derive(Debug, Clone, Copy)]
@@ -10,7 +8,7 @@ pub struct Sudoku {
 }
 
 impl Sudoku {
-    /// [Sudoku] constructor
+    /// [`Sudoku`] constructor
     pub fn new(board: [[u8; 9]; 9]) -> Self {
         Self { board }
     }

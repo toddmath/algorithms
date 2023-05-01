@@ -1,12 +1,13 @@
 //! rot13 or rotate 13 cipher algorithm
 
+/// Rotate 13 cipher encoder.
 pub fn another_rot13<T: AsRef<str>>(text: T) -> String {
     const INPUT: &str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     const OUTPUT: &str = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
     text.as_ref()
         .chars()
         .map(|c| match INPUT.find(c) {
-            Some(i) => OUTPUT.chars().nth(i).unwrap(),
+            Some(i) => unsafe { OUTPUT.chars().nth(i).unwrap_unchecked() },
             None => c,
         })
         .collect()

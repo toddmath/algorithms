@@ -5,7 +5,7 @@
 /// The aliquot sum of 6 is (1 + 2 + 3) = 6, and that of 15 is (1 + 3 + 5) = 9
 ///
 /// ```
-/// use algorithms::math::aliquot_sum;
+/// use math::aliquot_sum;
 /// assert_eq!(aliquot_sum(6), 6);
 /// assert_eq!(aliquot_sum(15), 9);
 /// ```
