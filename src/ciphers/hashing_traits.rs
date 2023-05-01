@@ -1,6 +1,7 @@
 //! Traits to help with Hashing
 use std::cmp::Ordering;
 
+/// [`Hasher`] is a trait that defines the interface of a cryptographic hash
 pub trait Hasher<const DIGEST_BYTES: usize> {
     /// create a new instance with default parameters
     fn new_default() -> Self;
@@ -15,15 +16,19 @@ pub trait Hasher<const DIGEST_BYTES: usize> {
 }
 
 /// HMAC based on RFC2104, applicable to many cryptographic hash functions
+#[derive(Debug)]
 #[allow(clippy::upper_case_acronyms)]
 pub struct HMAC<const KEY_BYTES: usize, const DIGEST_BYTES: usize, H: Hasher<DIGEST_BYTES>> {
+    /// inner state
     pub inner_internal_state: H,
+    /// outer state
     pub outer_internal_state: H,
 }
 
 impl<const KEY_BYTES: usize, const DIGEST_BYTES: usize, H: Hasher<DIGEST_BYTES>>
     HMAC<KEY_BYTES, DIGEST_BYTES, H>
 {
+    /// Create a new instance with default parameters
     pub fn new_default() -> Self {
         Self {
             inner_internal_state: H::new_default(),
@@ -60,10 +65,12 @@ impl<const KEY_BYTES: usize, const DIGEST_BYTES: usize, H: Hasher<DIGEST_BYTES>>
         }
     }
 
+    /// Add new data
     pub fn update(&mut self, data: &[u8]) {
         self.inner_internal_state.update(data);
     }
 
+    /// Returns the finalize of this [`HMAC<KEY_BYTES, DIGEST_BYTES, H>`].
     pub fn finalize(&mut self) -> [u8; DIGEST_BYTES] {
         self.outer_internal_state
             .update(&self.inner_internal_state.get_hash());

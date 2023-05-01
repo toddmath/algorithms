@@ -56,6 +56,14 @@ fn ssig1(x: u32) -> u32 {
     x.rotate_right(17) ^ x.rotate_right(19) ^ (x >> 10)
 }
 
+/// SHA-2 256 bit implementation
+///
+/// This implementation is based on [`RFC6234`].
+/// Keep in mind that the amount of data (in bits) processed should always be an
+/// integer multiple of 8.
+///
+/// [`RFC6234`]: https://www.rfc-editor.org/rfc/rfc6234
+#[derive(Debug)]
 pub struct SHA256 {
     /// The current block to be processed, 512 bits long
     buffer: [u32; 16],
@@ -65,6 +73,7 @@ pub struct SHA256 {
     pub h: [u32; 8],
     /// Message schedule
     w: [u32; 64],
+    /// Whether the hash has been finalized or not
     pub finalized: bool,
     // Temporary values:
     round: [u32; 8],
@@ -102,6 +111,7 @@ fn process_block(h: &mut [u32; 8], w: &mut [u32; 64], round: &mut [u32; 8], buf:
 }
 
 impl SHA256 {
+    /// Create a new SHA256 instance with the default initial hash value
     pub fn new_default() -> Self {
         SHA256 {
             buffer: [0u32; 16],
@@ -120,6 +130,7 @@ impl SHA256 {
         self.length += 512;
     }
 
+    /// Update the hash with the given data
     pub fn update(&mut self, data: &[u8]) {
         if data.is_empty() {
             return;
@@ -160,6 +171,7 @@ impl SHA256 {
         }
     }
 
+    /// Returns the hash of this [`SHA256`].
     pub fn get_hash(&mut self) -> [u8; 32] {
         // we should first add a `1` bit to the end of the buffer, then we will
         // add enough 0s so that the length becomes (512k + 448). After that we

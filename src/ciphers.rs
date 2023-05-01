@@ -8,10 +8,10 @@ mod sha256;
 mod theoretical_rot13;
 mod xor;
 
-use self::another_rot13::another_rot13;
-use self::caesar::caesar;
-use self::hashing_traits::{Hasher, HMAC};
-use self::rot13::rot13;
-use self::sha256::SHA256;
-use self::theoretical_rot13::theoretical_rot13;
-use self::xor::{xor, xor_bytes};
+pub use self::another_rot13::another_rot13;
+pub use self::caesar::caesar;
+pub use self::hashing_traits::{Hasher, HMAC};
+pub use self::rot13::rot13;
+pub use self::sha256::SHA256;
+pub use self::theoretical_rot13::theoretical_rot13;
+pub use self::xor::{xor, xor_bytes};

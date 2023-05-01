@@ -1,30 +1,31 @@
 //! Common algorithms implemented in rust
 
-#![allow(dead_code, unused_imports)]
+#![feature(is_sorted)]
 #![warn(
     missing_docs,
     // missing_doc_code_examples
     rustdoc::broken_intra_doc_links,
+    // unstable_features,
 )]
 #![deny(
     missing_debug_implementations,
     missing_copy_implementations,
     trivial_casts,
     trivial_numeric_casts,
-    // unsafe_code,
-    unstable_features,
     unused_import_braces,
     unused_qualifications
 )]
 
-#[allow(unused_imports)]
-#[macro_use]
-extern crate lazy_static;
+#[cfg(not(feature = "once_cell"))]
+pub use std::{cell::OnceCell, sync::Once as OnceCellSync};
+
+#[cfg(feature = "once_cell")]
+pub use once_cell::{sync::Lazy as OnceCellSync, unsync::Lazy as OnceCell};
 
 pub mod backtracking;
 pub mod big_integer;
-#[allow(unused_imports)]
 pub mod ciphers;
 pub mod compression;
 pub mod data_structures;
 pub mod math;
+pub mod sorting;
