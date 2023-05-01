@@ -4,7 +4,8 @@ members = [
     "math",
     "big-integer",
     "ciphers",
-    "compression"
+    "compression",
+    "backtracking"
 ]
 resolver = "2"
 

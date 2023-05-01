@@ -15,5 +15,4 @@
     unused_qualifications
 )]
 
-pub mod backtracking;
 pub mod data_structures;
