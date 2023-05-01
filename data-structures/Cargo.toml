@@ -1,0 +1,12 @@
+[package]
+name = "data-structures"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+keywords = ["algorithms", "data-structures"]
+categories = ["algorithms", "data-structures", "rust-patterns"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
