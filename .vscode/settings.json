@@ -1,4 +1,32 @@
 {
   "rust-analyzer.showUnlinkedFileNotification": false,
-  "vue.features.codeActions.enable": false,
+  "rust-analyzer.cargo.features": "all",
+  "rust-analyzer.check.invocationStrategy": "per_workspace",
+  "rust-analyzer.check.invocationLocation": "root",
+  "rust-analyzer.checkOnSave": true,
+  "rust-analyzer.completion.autoimport.enable": true,
+  "rust-analyzer.workspace.symbol.search.scope": "workspace",
+  "rust-analyzer.workspace.symbol.search.kind": "only_types",
+  // "rust-analyzer.cargo.buildScripts.overrideCommand": [
+  //   "cargo check --quiet --workspace --message-format=json --all-targets"
+  // ],
+  "rust-analyzer.cargo.buildScripts.invocationLocation": "root",
+  "rust-analyzer.cargo.buildScripts.invocationStrategy": "per_workspace",
+  "rust-analyzer.cargo.buildScripts.useRustcWrapper": true,
+  "rust-analyzer.cargo.buildScripts.enable": true,
+  "rust-analyzer.completion.autoself.enable": true,
+  "rust-analyzer.debug.engine": "vadimcn.vscode-lldb",
+  "rust-analyzer.highlightRelated.breakPoints.enable": true,
+  "rust-analyzer.highlightRelated.exitPoints.enable": true,
+  "rust-analyzer.highlightRelated.references.enable": true,
+  "rust-analyzer.highlightRelated.yieldPoints.enable": true,
+  "rust-analyzer.semanticHighlighting.doc.comment.inject.enable": true,
+  "rust-analyzer.semanticHighlighting.operator.enable": true,
+  "rust-analyzer.semanticHighlighting.operator.specialization.enable": true,
+  "rust-analyzer.semanticHighlighting.punctuation.enable": true,
+  "rust-analyzer.semanticHighlighting.punctuation.separate.macro.bang": true,
+  "rust-analyzer.semanticHighlighting.punctuation.specialization.enable": true,
+  "rust-analyzer.semanticHighlighting.strings.enable": true,
+  "editor.semanticHighlighting.enabled": true,
+  "evenBetterToml.syntax.semanticTokens": true
 }
