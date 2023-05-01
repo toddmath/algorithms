@@ -7,13 +7,10 @@ use num_traits::PrimInt;
 
 /// Calculate the least common multiple of given numbers
 pub fn lcm<T: PrimInt + Copy + BitOr<Output = T>>(nums: &[T]) -> T {
-    debug_assert!(!nums.is_empty(), "Cannot calculate lcm of an empty array.");
+    assert!(!nums.is_empty(), "Cannot calculate lcm of an empty array.");
     if nums.len() == 1 {
         return nums[0];
     }
-    // let a = nums[0];
-    // let b = lcm(&nums[1..]);
-    // a * (b / gcd(a, b))
     nums.iter()
         .copied()
         .reduce(|a, b| a * (b / gcd(a, b)))
@@ -84,8 +81,8 @@ mod tests {
     }
 
     #[test]
+    #[should_panic]
     fn empty_array() {
-        let result = std::panic::catch_unwind(|| lcm::<u32>(&[]));
-        assert!(result.is_err());
+        let _ = lcm::<u32>(&[]);
     }
 }

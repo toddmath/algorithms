@@ -244,20 +244,20 @@ mod tests {
     }
 
     #[test]
+    #[should_panic]
     fn invalid_matrix() {
-        let result = panic::catch_unwind(|| matrix![
+        let _ = matrix![
             [1, 0, 0, 4],
             [0, 1, 0],
             [0, 0, 1],
-        ]);
-        assert!(result.is_err());
+        ];
     }
 
     #[test]
+    #[should_panic]
     fn empty_matrix() {
         let a: Matrix<i32> = matrix![];
-        let result = panic::catch_unwind(|| a[[0, 0]]);
-        assert!(result.is_err());
+        let _ = a[[0, 0]];
     }
 
     #[test]
@@ -285,6 +285,7 @@ mod tests {
     }
 
     #[test]
+    #[should_panic]
     fn invalid_add() {
         let a = matrix![
             [1, 0, 1],
@@ -295,8 +296,7 @@ mod tests {
             [1, 2],
             [2, 4],
         ];
-        let result = panic::catch_unwind(|| &a + &err);
-        assert!(result.is_err());
+        let _ = &a + &err;
     }
 
     #[test]
@@ -340,6 +340,7 @@ mod tests {
     }
 
     #[test]
+    #[should_panic]
     fn invalid_sub() {
         let a = matrix![
             [2, 3],
@@ -350,8 +351,7 @@ mod tests {
             [7, 2, 2],
             [12, 0, 1],
         ];
-        let result = panic::catch_unwind(|| &a - &err);
-        assert!(result.is_err());
+        let _ = &a - &err;
     }
 
     #[test]
@@ -395,6 +395,7 @@ mod tests {
     }
 
     #[test]
+    #[should_panic]
     fn invalid_mul() {
         let a = matrix![
             [1, 2, 3],
@@ -408,8 +409,7 @@ mod tests {
             [3, 4, 2, 1],
             [3, 4, 2, 1],
         ];
-        let result = panic::catch_unwind(|| &a * &err);
-        assert!(result.is_err());
+        let _ = &a * &err;
     }
 
     #[test]

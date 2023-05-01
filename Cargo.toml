@@ -4,6 +4,7 @@ members = [
     "math",
     "big-integer"
 ]
+resolver = "2"
 
 [workspace.package]
 version = "0.1.0"
@@ -23,6 +24,9 @@ parking_lot = { version = "0.12", features = ["nightly"] }
 serde = { version = "1.0", features = ["derive"] }
 rand = { version = "0.8", features = ["min_const_gen"] }
 rayon = { version = "1.7" }
+pretty_assertions = "1.3.0"
+quickcheck = "1.0"
+quickcheck_macros = "1.0"
 
 [package]
 name = "algorithms"
@@ -45,13 +49,8 @@ serde = { workspace = true, optional = true, features = ["derive"] }
 rand = { workspace = true, optional = true, features = ["min_const_gen"] }
 rayon = { workspace = true, optional = true }
 
-[dev-dependencies]
-pretty_assertions = "1.3.0"
-quickcheck = "1.0"
-quickcheck_macros = "1.0"
-
 [features]
-default = ["parking_lot", "rayon"]
+default = []
 parking_lot = ["dep:parking_lot", "once_cell?/parking_lot"]
 once_cell = ["dep:once_cell"]
 rayon = ["dep:rayon"]
@@ -59,8 +58,20 @@ big-math = ["dep:num-traits", "dep:num-bigint", "dep:num-integer"]
 serialize-num = ["dep:serde", "num-bigint?/serde", "num-complex?/serde"]
 rand-num = ["dep:rand", "num-bigint?/rand", "num-complex?/rand"]
 
-[profile.bench]
-debug = true
+# [profile.bench]
+# debug = true
+# incremental = true
 
-[profile.test]
+# [profile.test]
+# debug = true
+# incremental = true
+
+[profile.dev]
 debug = true
+split-debuginfo = "unpacked"
+incremental = true
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
