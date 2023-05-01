@@ -16,5 +16,4 @@
 )]
 
 pub mod backtracking;
-pub mod compression;
 pub mod data_structures;

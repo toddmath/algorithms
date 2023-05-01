@@ -3,7 +3,8 @@ members = [
     "sorting",
     "math",
     "big-integer",
-    "ciphers"
+    "ciphers",
+    "compression"
 ]
 resolver = "2"
 

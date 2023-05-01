@@ -4,21 +4,31 @@
 
 use std::iter;
 
+use itertools::Itertools;
+
 /// Simple implementation of the run length encoding algorithm.
 pub fn run_length_encode(text: &str) -> Vec<(char, i32)> {
     text.chars()
         .map(|c| (c, 1_i32))
-        .fold(Vec::new(), |mut acc, c| {
-            match acc.pop() {
-                None => acc.push(c),
-                Some((x, i)) if x == c.0 => acc.push((c.0, i + 1)),
-                Some((x, i)) => {
-                    acc.push((x, i));
-                    acc.push(c);
-                }
+        .coalesce(|(x, i), (y, j)| {
+            if x == y {
+                Ok((x, i + j))
+            } else {
+                Err(((x, i), (y, j)))
             }
-            acc
         })
+        .collect_vec()
+    // .fold(Vec::new(), |mut acc, c| {
+    //     match acc.pop() {
+    //         None => acc.push(c),
+    //         Some((x, i)) if x == c.0 => acc.push((c.0, i + 1)),
+    //         Some((x, i)) => {
+    //             acc.push((x, i));
+    //             acc.push(c);
+    //         }
+    //     }
+    //     acc
+    // })
 }
 
 /// Simple implementation of the run length decoding algorithm.

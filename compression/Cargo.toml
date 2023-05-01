@@ -1,0 +1,13 @@
+[package]
+name = "compression"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+keywords = ["algorithms", "math", "cipher"]
+categories = ["algorithms", "mathematics"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+itertools = { workspace = true }
