@@ -80,7 +80,7 @@ impl<const KEY_BYTES: usize, const DIGEST_BYTES: usize, H: Hasher<DIGEST_BYTES>>
 
 #[cfg(test)]
 mod tests {
-    use crate::ciphers::{sha256::tests::get_hash_string, HMAC, SHA256};
+    use crate::{sha256::tests::get_hash_string, HMAC, SHA256};
 
     #[test]
     fn sha256_basic() {
