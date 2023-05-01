@@ -1,7 +1,8 @@
 [workspace]
 members = [
     "sorting",
-    "math"
+    "math",
+    "big-integer"
 ]
 
 [workspace.package]
