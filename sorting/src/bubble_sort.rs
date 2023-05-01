@@ -21,7 +21,7 @@ pub fn bubble_sort<T: Ord>(arr: &mut [T]) {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::sorting::{have_same_elements, is_sorted};
+    use crate::{have_same_elements, is_sorted};
 
     #[test]
     fn descending() {

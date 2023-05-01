@@ -31,7 +31,7 @@ pub fn bucket_sort(arr: &[usize]) -> Vec<usize> {
 #[allow(clippy::redundant_clone)]
 mod tests {
     use super::*;
-    use crate::sorting::{have_same_elements, is_sorted};
+    use crate::{have_same_elements, is_sorted};
 
     #[test]
     fn empty() {

@@ -1,5 +1,7 @@
 //! Sorting algorithms
 
+#![feature(is_sorted)]
+
 mod bead_sort;
 mod bogo_sort;
 mod bubble_sort;

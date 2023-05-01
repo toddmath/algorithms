@@ -25,7 +25,7 @@ pub fn bead_sort(data: &mut [usize]) {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::sorting::{have_same_elements, is_sorted};
+    use crate::{have_same_elements, is_sorted};
 
     #[test]
     fn descending() {

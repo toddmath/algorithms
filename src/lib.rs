@@ -28,4 +28,3 @@ pub mod ciphers;
 pub mod compression;
 pub mod data_structures;
 pub mod math;
-pub mod sorting;
