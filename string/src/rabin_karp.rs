@@ -74,55 +74,55 @@ mod tests {
     // Attribution to @pgimalac for his tests from Knuth-Morris-Pratt
     #[test]
     fn each_letter_matches() {
-        let index = rabin_karp("aaa".to_string(), "a".to_string());
+        let index = rabin_karp("aaa", "a");
         assert_eq!(index, vec![0, 1, 2]);
     }
 
     #[test]
     fn a_few_separate_matches() {
-        let index = rabin_karp("abababa".to_string(), "ab".to_string());
+        let index = rabin_karp("abababa", "ab");
         assert_eq!(index, vec![0, 2, 4]);
     }
 
     #[test]
     fn one_match() {
-        let index = rabin_karp("ABC ABCDAB ABCDABCDABDE".to_string(), "ABCDABD".to_string());
+        let index = rabin_karp("ABC ABCDAB ABCDABCDABDE", "ABCDABD");
         assert_eq!(index, vec![15]);
     }
 
     #[test]
     fn lots_of_matches() {
-        let index = rabin_karp("aaabaabaaaaa".to_string(), "aa".to_string());
+        let index = rabin_karp("aaabaabaaaaa", "aa");
         assert_eq!(index, vec![0, 1, 4, 7, 8, 9, 10]);
     }
 
     #[test]
     fn lots_of_intricate_matches() {
-        let index = rabin_karp("ababababa".to_string(), "aba".to_string());
+        let index = rabin_karp("ababababa", "aba");
         assert_eq!(index, vec![0, 2, 4, 6]);
     }
 
     #[test]
     fn not_found0() {
-        let index = rabin_karp("abcde".to_string(), "f".to_string());
+        let index = rabin_karp("abcde", "f");
         assert_eq!(index, vec![]);
     }
 
     #[test]
     fn not_found1() {
-        let index = rabin_karp("abcde".to_string(), "ac".to_string());
+        let index = rabin_karp("abcde", "ac");
         assert_eq!(index, vec![]);
     }
 
     #[test]
     fn not_found2() {
-        let index = rabin_karp("ababab".to_string(), "bababa".to_string());
+        let index = rabin_karp("ababab", "bababa");
         assert_eq!(index, vec![]);
     }
 
     #[test]
     fn empty_string() {
-        let index = rabin_karp("".to_string(), "abcdef".to_string());
+        let index = rabin_karp("", "abcdef");
         assert_eq!(index, vec![]);
     }
 }
