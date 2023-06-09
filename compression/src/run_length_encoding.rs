@@ -47,8 +47,10 @@ mod tests {
     fn test_run_length_decode() {
         let res = run_length_decode(&[('A', 0)]);
         assert_eq!(res, "");
+
         let res = run_length_decode(&[('B', 1)]);
         assert_eq!(res, "B");
+
         let res = run_length_decode(&[('A', 5), ('z', 3), ('B', 1)]);
         assert_eq!(res, "AAAAAzzzB");
     }
