@@ -1,0 +1,18 @@
+[package]
+name = "searching"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+keywords = ["algorithms", "searching", "rust-patterns"]
+categories = ["algorithms", "rust-patterns"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+sorting = { path = "../sorting" }
+data-structures = { path = "../data-structures" }
+itertools = { workspace = true }
+rayon = { workspace = true }
+num-traits = { workspace = true }
+num-integer = { workspace = true }
