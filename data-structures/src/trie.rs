@@ -3,24 +3,33 @@
 use std::{collections::HashMap, hash::Hash};
 
 #[derive(Debug, Default)]
-struct Node<Key: Default, Type: Default> {
+struct Node<Key, Type> {
     children: HashMap<Key, Node<Key, Type>>,
     value: Option<Type>,
 }
 
 /// Trie data structure
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct Trie<Key, Type>
 where
-    Key: Default + Eq + Hash,
-    Type: Default,
+    Key: Eq + PartialEq + Hash,
 {
     root: Node<Key, Type>,
 }
 
+impl<Key, Type> Default for Trie<Key, Type>
+where
+    Key: Eq + PartialEq + Hash + Default,
+    Type: Default,
+{
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<Key, Type> Trie<Key, Type>
 where
-    Key: Default + Eq + Hash,
+    Key: PartialEq + Eq + Hash + Default,
     Type: Default,
 {
     /// Creates a new [`Trie`].
@@ -31,32 +40,22 @@ where
     }
 
     /// Insert a value into the trie
-    pub fn insert(&mut self, key: impl IntoIterator<Item = Key>, value: Type)
-    where
-        Key: Eq + Hash,
-    {
+    pub fn insert(&mut self, key: impl IntoIterator<Item = Key>, value: Type) {
         let mut node = &mut self.root;
-        for c in key.into_iter() {
-            node = node.children.entry(c).or_insert_with(Node::default);
+        for c in key {
+            node = node.children.entry(c).or_default();
+            // node = node.children.entry(c).or_insert_with(Node::default);
         }
         node.value.replace(value);
-        // node.value = Some(value);
     }
 
     /// Get a value from the trie
-    pub fn get(&self, key: impl IntoIterator<Item = Key>) -> Option<&Type>
-    where
-        Key: Eq + Hash,
-    {
-        let mut node = &self.root;
-        for c in key.into_iter() {
-            if node.children.contains_key(&c) {
-                node = node.children.get(&c).unwrap()
-            } else {
-                return None;
-            }
+    pub fn get(&self, key: impl IntoIterator<Item = Key>) -> Option<&Type> {
+        let mut node = Some(&self.root);
+        for c in key {
+            node.replace(node?.children.get(&c)?);
         }
-        node.value.as_ref()
+        node?.value.as_ref()
     }
 }
 

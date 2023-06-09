@@ -15,18 +15,19 @@ struct Node<T> {
 }
 
 impl<T> Default for Stack<T> {
+    #[inline]
     fn default() -> Self {
         Self::new()
     }
 }
 
 impl<T> Stack<T> {
-    /// Creates a new [`Stack`].
+    /// Creates a new [`Stack<T>`].
     pub fn new() -> Self {
         Self { head: None }
     }
 
-    /// Add element to end of [`Stack`]
+    /// Add element to end of [`Stack<T>`]
     pub fn push(&mut self, elem: T) {
         let new_node = Box::new(Node {
             elem,
@@ -35,15 +36,19 @@ impl<T> Stack<T> {
         self.head.replace(new_node);
     }
 
-    /// Pop element from the [`Stack`]
-    pub fn pop(&mut self) -> Result<T, &str> {
-        match self.head.take() {
-            None => Err("Stack is empty"),
-            Some(node) => {
-                self.head = node.next;
-                Ok(node.elem)
-            }
-        }
+    /// Pop element from the [`Stack<T>`]
+    pub fn pop(&mut self) -> Option<T> {
+        self.head.take().map(|node| {
+            self.head = node.next;
+            node.elem
+        })
+        // match self.head.take() {
+        //     None => Err("Stack is empty"),
+        //     Some(node) => {
+        //         self.head = node.next;
+        //         Ok(node.elem)
+        //     }
+        // }
     }
 
     #[inline(always)]
@@ -82,9 +87,27 @@ impl<T> Stack<T> {
 impl<T> Drop for Stack<T> {
     fn drop(&mut self) {
         let mut cur_link = self.head.take();
-        while let Some(mut node) = cur_link {
+        while let Some(ref mut node) = cur_link {
             cur_link = node.next.take();
         }
+    }
+}
+
+impl<T> Extend<T> for Stack<T> {
+    fn extend<I: IntoIterator<Item = T>>(&mut self, iter: I) {
+        for elem in iter {
+            self.push(elem);
+        }
+    }
+}
+
+impl<T> FromIterator<T> for Stack<T> {
+    fn from_iter<I: IntoIterator<Item = T>>(iter: I) -> Self {
+        let mut stack = Stack::default();
+        for elem in iter {
+            stack.push(elem);
+        }
+        stack
     }
 }
 
@@ -102,8 +125,10 @@ pub struct IntoIter<T>(Stack<T>);
 
 impl<T> Iterator for IntoIter<T> {
     type Item = T;
+
     fn next(&mut self) -> Option<Self::Item> {
-        self.0.pop().ok()
+        self.0.pop()
+        // self.0.pop().ok()
     }
 }
 
@@ -114,6 +139,7 @@ pub struct Iter<'a, T> {
 
 impl<'a, T> Iterator for Iter<'a, T> {
     type Item = &'a T;
+
     fn next(&mut self) -> Option<Self::Item> {
         self.next.map(|node| {
             self.next = node.next.as_deref();
@@ -129,6 +155,7 @@ pub struct IterMut<'a, T> {
 
 impl<'a, T> Iterator for IterMut<'a, T> {
     type Item = &'a mut T;
+
     fn next(&mut self) -> Option<Self::Item> {
         self.next.take().map(|node| {
             self.next = node.next.as_deref_mut();
@@ -144,26 +171,26 @@ mod tests {
     #[test]
     fn basics() {
         let mut list = Stack::new();
-        assert_eq!(list.pop(), Err("Stack is empty"));
+        assert!(list.pop().is_none());
         list.push(1);
         list.push(2);
         list.push(3);
-        assert_eq!(list.pop(), Ok(3));
-        assert_eq!(list.pop(), Ok(2));
+        assert_eq!(list.pop(), Some(3));
+        assert_eq!(list.pop(), Some(2));
         list.push(4);
         list.push(5);
         assert!(!list.is_empty());
-        assert_eq!(list.pop(), Ok(5));
-        assert_eq!(list.pop(), Ok(4));
-        assert_eq!(list.pop(), Ok(1));
-        assert_eq!(list.pop(), Err("Stack is empty"));
+        assert_eq!(list.pop(), Some(5));
+        assert_eq!(list.pop(), Some(4));
+        assert_eq!(list.pop(), Some(1));
+        assert!(list.pop().is_none());
         assert!(list.is_empty());
     }
 
     #[test]
     fn peek() {
         let mut list = Stack::new();
-        assert_eq!(list.peek(), None);
+        assert!(list.peek().is_none());
         list.push(1);
         list.push(2);
         list.push(3);
@@ -171,13 +198,12 @@ mod tests {
         assert_eq!(list.peek(), Some(&3));
         assert_eq!(list.peek_mut(), Some(&mut 3));
 
-        match list.peek_mut() {
-            None => (),
-            Some(value) => *value = 42,
+        if let Some(value) = list.peek_mut() {
+            *value = 42
         };
 
         assert_eq!(list.peek(), Some(&42));
-        assert_eq!(list.pop(), Ok(42));
+        assert_eq!(list.pop(), Some(42));
     }
 
     #[test]
@@ -218,5 +244,31 @@ mod tests {
         assert_eq!(iter.next(), Some(&mut 3));
         assert_eq!(iter.next(), Some(&mut 2));
         assert_eq!(iter.next(), Some(&mut 1));
+    }
+
+    #[test]
+    fn extend() {
+        let mut list = Stack::new();
+        list.extend(vec![1, 2, 3]);
+        assert_eq!(list.pop(), Some(3));
+        assert_eq!(list.pop(), Some(2));
+        assert_eq!(list.pop(), Some(1));
+        assert!(list.pop().is_none() && list.is_empty());
+
+        list.extend(vec![3, 2, 1]);
+        assert_eq!(list.pop(), Some(1));
+        assert_eq!(list.pop(), Some(2));
+        assert_eq!(list.pop(), Some(3));
+        assert!(list.pop().is_none() && list.is_empty());
+    }
+
+    #[test]
+    fn from_iter() {
+        let mut list = Stack::from_iter(vec![1, 2, 3]);
+        assert!(!list.is_empty());
+        assert_eq!(list.pop(), Some(3));
+        assert_eq!(list.pop(), Some(2));
+        assert_eq!(list.pop(), Some(1));
+        assert!(list.pop().is_none() && list.is_empty());
     }
 }

@@ -27,6 +27,7 @@ impl<T> Node<T>
 where
     T: Ord,
 {
+    #[inline]
     fn new(degree: usize, keys: Option<Vec<T>>, children: Option<Vec<Node<T>>>) -> Self {
         Node {
             keys: keys.unwrap_or_else(|| Vec::with_capacity(degree - 1)),
@@ -41,7 +42,8 @@ where
 }
 
 impl BTreeProps {
-    fn new(degree: usize) -> Self {
+    #[inline]
+    const fn new(degree: usize) -> Self {
         Self {
             degree,
             max_keys: degree - 1,
@@ -50,11 +52,14 @@ impl BTreeProps {
     }
 
     #[inline(always)]
-    fn is_maxed_out<T: Ord + Copy>(&self, node: &Node<T>) -> bool {
+    fn is_maxed_out<T: Ord>(&self, node: &Node<T>) -> bool {
         node.keys.len() == self.max_keys
     }
 
-    fn split_child<T: Ord + Copy + Default>(&self, parent: &mut Node<T>, child_index: usize) {
+    fn split_child<T>(&self, parent: &mut Node<T>, child_index: usize)
+    where
+        T: Copy + Ord, //     T: Ord + Copy + Default,
+    {
         let child = &mut parent.children[child_index];
         let mid_key = child.keys[self.mid_key_index];
 
@@ -76,7 +81,10 @@ impl BTreeProps {
         parent.children.insert(child_index + 1, new_child_node);
     }
 
-    fn insert_non_full<T: Ord + Copy + Default>(&mut self, node: &mut Node<T>, key: T) {
+    fn insert_non_full<T>(&mut self, node: &mut Node<T>, key: T)
+    where
+        T: Ord + Copy,
+    {
         let mut index = isize::try_from(node.keys.len()).ok().unwrap() - 1;
         while index >= 0 && node.keys[index as usize] >= key {
             index -= 1;
@@ -96,7 +104,10 @@ impl BTreeProps {
         }
     }
 
-    fn traverse_node<T: Ord + Debug>(node: &Node<T>, depth: usize) {
+    fn traverse_node<T>(node: &Node<T>, depth: usize)
+    where
+        T: Ord + Debug,
+    {
         if node.is_leaf() {
             print!(" {0:{<1$}{2:?}{0:}<1$} ", "", depth, node.keys);
         } else {
@@ -114,7 +125,7 @@ impl BTreeProps {
 
 impl<T> BTree<T>
 where
-    T: Ord + Copy + Debug + Default,
+    T: Ord,
 {
     /// Creates a new [`BTree<T>`].
     pub fn new(branch_factor: usize) -> Self {
@@ -126,7 +137,10 @@ where
     }
 
     /// Inserts a key into the [`BTree<T>`].
-    pub fn insert(&mut self, key: T) {
+    pub fn insert(&mut self, key: T)
+    where
+        T: Copy,
+    {
         if self.props.is_maxed_out(&self.root) {
             let mut new_root = Node::new(self.props.degree, None, None);
             mem::swap(&mut new_root, &mut self.root);
@@ -137,7 +151,10 @@ where
     }
 
     /// Traverses the [`BTree<T>`].
-    pub fn traverse(&self) {
+    pub fn traverse(&self)
+    where
+        T: Debug,
+    {
         BTreeProps::traverse_node(&self.root, 0);
         println!();
     }
@@ -152,14 +169,23 @@ where
                 index -= 1;
             }
             let u_index = usize::try_from(index + 1).ok().unwrap();
-            #[allow(unused_comparisons, clippy::absurd_extreme_comparisons)]
+
+            // #[allow(unused_comparisons, clippy::absurd_extreme_comparisons)]
             if index >= 0 && current_node.keys[u_index - 1] == key {
-                break true;
+                return true;
             } else if current_node.is_leaf() {
-                break false;
+                return false;
             } else {
                 current_node = &current_node.children[u_index];
             }
+        }
+    }
+}
+
+impl<T: Ord + Copy> Extend<T> for BTree<T> {
+    fn extend<I: IntoIterator<Item = T>>(&mut self, iter: I) {
+        for key in iter {
+            self.insert(key);
         }
     }
 }
@@ -180,6 +206,14 @@ mod tests {
         tree.insert(11);
         tree.insert(12);
         tree.insert(15);
+        assert!(tree.search(15));
+        assert!(!tree.search(16));
+    }
+
+    #[test]
+    fn extend() {
+        let mut tree = BTree::new(2);
+        tree.extend([10, 20, 30, 5, 6, 7, 11, 12, 15].into_iter());
         assert!(tree.search(15));
         assert!(!tree.search(16));
     }

@@ -84,6 +84,7 @@ enum Side {
 
 impl Not for Side {
     type Output = Self;
+
     fn not(self) -> Self::Output {
         match self {
             Self::Left => Self::Right,
@@ -94,9 +95,9 @@ impl Not for Side {
 
 /// A set based on an AVL Tree.
 ///
-/// An AVL Tree is a self-balancing binary search tree. It tracks the height of each node
-/// and performs internal rotations to maintain a height difference of at most 1 between
-/// each sibling pair.
+/// An AVL Tree is a self-balancing binary search tree. It tracks the height of
+/// each node and performs internal rotations to maintain a height difference of
+/// at most 1 between each sibling pair.
 #[derive(Debug)]
 pub struct AVLTree<T: Ord> {
     root: Option<Box<AVLNode<T>>>,
@@ -139,7 +140,7 @@ impl<T: Ord> AVLTree<T> {
     /// Returns `true` uf the tree contains a value.
     pub fn contains(&self, value: &T) -> bool {
         let mut current = &self.root;
-        while let Some(node) = current {
+        while let Some(ref node) = current {
             current = match value.cmp(&node.value) {
                 Ordering::Equal => return true,
                 Ordering::Less => &node.left,
@@ -195,7 +196,8 @@ impl<T: Ord> AVLTree<T> {
         node_iter
     }
 
-    /// Returns an iterator that visits the values in the tree in ascending order.
+    /// Returns an iterator that visits the values in the tree in ascending
+    /// order.
     pub fn iter(&self) -> Iter<T> {
         Iter {
             node_iter: self.node_iter(),
@@ -205,7 +207,7 @@ impl<T: Ord> AVLTree<T> {
 
 fn insert<T: Ord>(tree: &mut Option<Box<AVLNode<T>>>, value: T) -> bool {
     match tree {
-        Some(node) => {
+        Some(ref mut node) => {
             let inserted = match value.cmp(&node.value) {
                 Ordering::Equal => false,
                 Ordering::Less => insert(&mut node.left, value),
@@ -282,7 +284,7 @@ fn take_min<T: Ord>(tree: &mut Option<Box<AVLNode<T>>>) -> Option<Box<AVLNode<T>
 
 /// An iterator over the nodes of an [`AVLTree`].
 ///
-/// This struct is created by the method [`AVLTree::node_iter`].
+/// This struct is created by the method [`AVLTree::node_iter()`].
 #[derive(Debug)]
 struct NodeIter<'a, T: Ord> {
     stack: Vec<&'a AVLNode<T>>,
@@ -294,6 +296,14 @@ impl<'a, T: Ord> Iterator for NodeIter<'a, T> {
     fn next(&mut self) -> Option<Self::Item> {
         self.stack.pop().map(|node| {
             let mut child = &node.right;
+            // loop {
+            //     child = if let Some(subtree) = child {
+            //         self.stack.push(subtree.as_ref());
+            //         &subtree.left
+            //     } else {
+            //         break;
+            //     };
+            // }
             while let Some(subtree) = child {
                 self.stack.push(subtree.as_ref());
                 child = &subtree.left;
