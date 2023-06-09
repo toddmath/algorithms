@@ -6,7 +6,10 @@ members = [
     "ciphers",
     "compression",
     "backtracking",
-    "data-structures"
+    "data-structures",
+    "dynamic-programming",
+    "searching",
+    "string"
 ]
 resolver = "2"
 
@@ -31,6 +34,7 @@ rayon = { version = "1.7" }
 pretty_assertions = "1.3.0"
 quickcheck = "1.0"
 quickcheck_macros = "1.0"
+smallvec = { version = "1.10", features = ["write", "const_generics", "const_new"] }
 
 [package]
 name = "algorithms"
@@ -61,14 +65,6 @@ rayon = ["dep:rayon"]
 big-math = ["dep:num-traits", "dep:num-bigint", "dep:num-integer"]
 serialize-num = ["dep:serde", "num-bigint?/serde", "num-complex?/serde"]
 rand-num = ["dep:rand", "num-bigint?/rand", "num-complex?/rand"]
-
-# [profile.bench]
-# debug = true
-# incremental = true
-
-# [profile.test]
-# debug = true
-# incremental = true
 
 [profile.dev]
 debug = true

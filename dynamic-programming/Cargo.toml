@@ -1,0 +1,17 @@
+[package]
+name = "dynamic-programming"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+keywords = ["algorithms", "dynamic-programming", "rust-patterns"]
+categories = ["algorithms", "data-structures", "rust-patterns"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+itertools = { workspace = true }
+rayon = { workspace = true }
+num-traits = { workspace = true }
+num-integer = { workspace = true }
+num-complex = { workspace = true }
