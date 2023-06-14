@@ -1,8 +1,10 @@
+/// Reverse a string
 #[inline]
 pub fn reverse(text: impl AsRef<str>) -> String {
     text.as_ref().chars().rev().collect()
 }
 
+// cSpell: disable
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -13,7 +15,7 @@ mod tests {
     }
 
     #[test]
-    fn test_assymetric() {
+    fn test_asymmetric() {
         assert_eq!(reverse("abcdef"), "fedcba")
     }
 
