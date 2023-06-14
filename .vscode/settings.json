@@ -28,5 +28,16 @@
   "rust-analyzer.semanticHighlighting.punctuation.specialization.enable": true,
   "rust-analyzer.semanticHighlighting.strings.enable": true,
   "editor.semanticHighlighting.enabled": true,
-  "evenBetterToml.syntax.semanticTokens": true
+  "evenBetterToml.syntax.semanticTokens": true,
+  "cSpell.words": [
+    "Bitonic",
+    "Bogo",
+    "hypot",
+    "kmeans",
+    "modname",
+    "nums",
+    "powi",
+    "quickcheck",
+    "steinhaus"
+  ]
 }
