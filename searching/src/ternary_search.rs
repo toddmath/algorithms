@@ -11,26 +11,16 @@ pub fn ternary_search<T: Ord>(
         return None;
     }
     while start <= end {
-        let mid1 = start + (end - start) / 3;
-        let mid2 = end - (end - start) / 3;
-
+        let (mid1, mid2) = (start + (end - start) / 3, end - (end - start) / 3);
         match target.cmp(&list[mid1]) {
             Ordering::Equal => return Some(mid1),
-            Ordering::Less  => end = mid1 - 1,
+            Ordering::Less => end = mid1 - 1,
             Ordering::Greater if target == &list[mid2] => return Some(mid2),
-            Ordering::Greater if target  > &list[mid2] => start = mid2 + 1,
+            Ordering::Greater if target > &list[mid2] => start = mid2 + 1,
             Ordering::Greater => {
                 start = mid1 + 1;
                 end = mid2 - 1;
             }
-            // Ordering::Greater => match target.cmp(&list[mid2]) {
-            //     Ordering::Equal => return Some(mid2),
-            //     Ordering::Greater => start = mid2 + 1,
-            //     Ordering::Less => {
-            //         start = mid1 + 1;
-            //         end = mid2 - 1;
-            //     }
-            // },
         }
     }
     None

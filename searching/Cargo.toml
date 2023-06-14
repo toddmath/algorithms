@@ -16,3 +16,6 @@ itertools = { workspace = true }
 rayon = { workspace = true }
 num-traits = { workspace = true }
 num-integer = { workspace = true }
+
+[dev-dependencies]
+is_close = { workspace = true }

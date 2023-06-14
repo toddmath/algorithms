@@ -1,50 +1,52 @@
-use num_traits::Float;
+use std::cmp::Ordering;
 
-/// Ternary search algorithm for finding maximum of unimodal function
-pub fn ternary_search_max<F: Float>(
-    f: fn(F) -> F,
-    mut start: F,
-    mut end: F,
-    absolute_precision: F,
-) -> F {
-    while (start - end).abs() >= absolute_precision {
-        let mid1 = start + (end - start) / F::from(3.0).unwrap();
-        let mid2 = end - (end - start) / F::from(3.0).unwrap();
-        let r1 = f(mid1);
-        let r2 = f(mid2);
+// use num_traits::{Float, Signed};
 
-        if r1 < r2 {
-            start = mid1;
-        } else if r1 > r2 {
-            end = mid2;
-        } else {
-            start = mid1;
-            end = mid2;
+/// Ternary search algorithm for finding maximum of uni-modal function
+pub fn ternary_search_max(
+    f: fn(f32) -> f32,
+    mut start: f32,
+    mut end: f32,
+    // absolute_precision: f32,
+) -> f32 {
+    while (start - end).abs() > 1e-6 {
+        let mid1 = start + (end - start) / 3.0;
+        let mid2 = end - (end - start) / 3.0;
+        let (r1, r2) = (f(mid1), f(mid2));
+
+        match r1.partial_cmp(&r2) {
+            Some(Ordering::Less) => start = mid1,
+            Some(Ordering::Greater) => end = mid2,
+            Some(Ordering::Equal) => {
+                start = mid1;
+                end = mid2;
+            }
+            None => (),
         }
     }
     f(start)
 }
 
-/// Ternary search algorithm for finding minimum of unimodal function
-pub fn ternary_search_min<F: Float>(
-    f: fn(F) -> F,
-    mut start: F,
-    mut end: F,
-    absolute_precision: F,
-) -> F {
-    while (start - end).abs() >= absolute_precision {
-        let mid1 = start + (end - start) / F::from(3.0).unwrap();
-        let mid2 = end - (end - start) / F::from(3.0).unwrap();
-        let r1 = f(mid1);
-        let r2 = f(mid2);
+/// Ternary search algorithm for finding minimum of uni-modal function
+pub fn ternary_search_min(
+    f: fn(f32) -> f32,
+    mut start: f32,
+    mut end: f32,
+    // absolute_precision: f32,
+) -> f32 {
+    while (start - end).abs() > 1e-6 {
+        let mid1 = start + (end - start) / 3.0;
+        let mid2 = end - (end - start) / 3.0;
+        let (r1, r2) = (f(mid1), f(mid2));
 
-        if r1 < r2 {
-            end = mid2;
-        } else if r1 > r2 {
-            start = mid1;
-        } else {
-            start = mid1;
-            end = mid2;
+        match r1.partial_cmp(&r2) {
+            Some(Ordering::Less) => end = mid2,
+            Some(Ordering::Greater) => start = mid1,
+            Some(Ordering::Equal) => {
+                start = mid1;
+                end = mid2;
+            }
+            None => (),
         }
     }
     f(start)
@@ -61,9 +63,9 @@ mod tests {
 
         let start: f32 = -10000000000.0;
         let end: f32 = 10000000000.0;
-        let absolute_precision = 0.0000001;
+        // let absolute_precision = 0.0000001;
 
-        let result = ternary_search_max(f, start, end, absolute_precision);
+        let result = ternary_search_max(f, start, end);
 
         assert_eq!(result, expected);
     }
@@ -75,9 +77,9 @@ mod tests {
 
         let start: f32 = -10000000000.0;
         let end: f32 = 10000000000.0;
-        let absolute_precision = 0.0000001;
+        // let absolute_precision = 0.0000001;
 
-        let result = ternary_search_min(f, start, end, absolute_precision);
+        let result = ternary_search_min(f, start, end);
 
         assert_eq!(result, expected);
     }
@@ -89,9 +91,9 @@ mod tests {
 
         let start: f32 = -10000000000.0;
         let end: f32 = 10000000000.0;
-        let absolute_precision = 0.000001;
+        // let absolute_precision = 0.000001;
 
-        let result = ternary_search_max(f, start, end, absolute_precision);
+        let result = ternary_search_max(f, start, end);
 
         assert_eq!(result, expected);
     }
@@ -103,9 +105,9 @@ mod tests {
 
         let start: f32 = -10000000000.0;
         let end: f32 = 10000000000.0;
-        let absolute_precision = 0.000001;
+        // let absolute_precision = 0.000001;
 
-        let result = ternary_search_min(f, start, end, absolute_precision);
+        let result = ternary_search_min(f, start, end);
 
         assert_eq!(result, expected);
     }
